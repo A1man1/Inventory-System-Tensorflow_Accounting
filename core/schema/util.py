@@ -1,10 +1,10 @@
+import logging
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
-import logging
 
 from core.settings import get_app_settings
+from fastapi import HTTPException, status
 
 # configure settings object for global settings.
 settings = get_app_settings()

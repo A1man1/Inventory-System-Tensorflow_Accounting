@@ -1,8 +1,9 @@
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
-import typing 
+import typing
 from typing import Optional
-from core.schema.ModelOpreator.company import CompanyDetailSchema
-from core.schema.ModelOpreator.product import ProductSchema
+
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
+
 
 class SuppilersSchema(BaseSchema):
     name: Optional[str]

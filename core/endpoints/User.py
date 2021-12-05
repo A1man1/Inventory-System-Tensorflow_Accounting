@@ -1,13 +1,15 @@
-from typing import Optional
 import typing
-from fastapi import APIRouter, Depends, HTTPException, status
-from starlette.status import HTTP_204_NO_CONTENT
-from core.authentication import AuthHandler
-from core.schema.model_operation import UserOperation
+from typing import Optional
+
+from core.authentication import AuthHandler, JWTBearer
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.user import  LoginOut, UserSchemaOut , UserSchemaCreate , UserLoginSchema
-from core.authentication import JWTBearer
+from core.schema.model_operation import UserOperation
+from core.schema.ModelOpreator.user import (LoginOut, UserLoginSchema,
+                                            UserSchemaCreate, UserSchemaOut)
+from fastapi import APIRouter, Depends, HTTPException, status
+from starlette.status import HTTP_204_NO_CONTENT
+
 router = APIRouter(
     prefix="/users",
     tags=["Users"]

@@ -1,13 +1,14 @@
 from datetime import date, datetime
-from uuid import uuid4, uuid3 ,uuid1
-from sqlalchemy import Integer,Column, String ,  Boolean , Text, Date , Table, DateTime 
+from uuid import uuid1, uuid3, uuid4
+
+from core.dbconfig.db_engin import metadata
+from sqlalchemy import (Boolean, Column, Date, DateTime, Integer, String,
+                        Table, Text)
+from sqlalchemy.sql.functions import current_date, current_time, now
+from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import ARRAY, Enum, Float
 #from sqlalchemy_imageattach.entity import Image ,  image_attachment
 from sqlalchemy_utils import URLType
-from sqlalchemy.sql.functions import current_date, current_time, now
-from sqlalchemy.sql.schema import ForeignKey 
-from core.dbconfig.db_engin import metadata
-
 
 CompanyDetail= Table(
     "company_detail",metadata

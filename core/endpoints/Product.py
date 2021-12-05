@@ -1,13 +1,14 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
-from starlette.status import HTTP_204_NO_CONTENT, HTTP_406_NOT_ACCEPTABLE
-from core.authentication import AuthHandler
-from core.schema.model_operation import ProductOperation, RoleOperation
+
+from core.authentication import AuthHandler, JWTBearer
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.product import  ProductSchemaOut, ProductSchemaCreate
+from core.schema.model_operation import ProductOperation, RoleOperation
+from core.schema.ModelOpreator.product import (ProductSchemaCreate,
+                                               ProductSchemaOut)
 from core.schema.trie import Trie
-from core.authentication import JWTBearer
+from fastapi import APIRouter, Depends, HTTPException, status
+from starlette.status import HTTP_204_NO_CONTENT, HTTP_406_NOT_ACCEPTABLE
 
 router = APIRouter(
     prefix="/product",

@@ -1,13 +1,13 @@
+from typing import Type
+
 import sqlalchemy
+from core.models.tables import (CompanyDetail, Leger_page, LegerBook, Order,
+                                Product, Purchase, Role, Suppilers, User)
+from core.schema.BaseSchema import BaseRepository
+from core.schema.ModelOpreator import (company, leger_book, leger_page, order,
+                                       product, purchase, role, supplier, user)
 from sqlalchemy.sql.schema import Column
 from sqlalchemy.sql.sqltypes import Date
-from core.schema.BaseSchema import BaseRepository
-from typing import Type
-from core.models.tables import(CompanyDetail,Product,Purchase,Role, Suppilers,User,Order,Leger_page,LegerBook)
-from core.schema.ModelOpreator import (
-        product , company , supplier , 
-        order, role, user, purchase, 
-        leger_book, leger_page)
 
 
 class CompanyDetailOperation(BaseRepository):

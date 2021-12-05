@@ -1,5 +1,7 @@
-from sklearn.datasets import fetch_20newsgroups
 import re
+
+from sklearn.datasets import fetch_20newsgroups
+
 categories=[
 			'alt.atheism', 
 			'comp.os.ms-windows.misc',

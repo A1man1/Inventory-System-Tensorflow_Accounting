@@ -1,8 +1,9 @@
 from datetime import date
-from uuid import uuid4
 from typing import Optional
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
+from uuid import uuid4
 
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
 
 
 class PurchaseSchema(BaseSchema):

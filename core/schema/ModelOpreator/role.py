@@ -1,7 +1,9 @@
-import typing 
+import typing
 from typing import Optional
+
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
 from core.schema.ModelOpreator.company import CompanyDetailSchema
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
 
 
 class RoleSchema(BaseSchema):

@@ -1,14 +1,12 @@
 from typing import Callable
-import sqlalchemy
-from fastapi import FastAPI
-from fastapi import FastAPI
-from core.settings import Settings
-from core.dbconfig import db_engin
-from core.config import log
+
 import pymongo
+import sqlalchemy
+from core.config import log
+from core.dbconfig import db_engin
+from core.settings import Settings
+from fastapi import FastAPI
 from sqlalchemy.orm import sessionmaker
-
-
 
 
 async def connect_to_db(app: FastAPI) -> None:

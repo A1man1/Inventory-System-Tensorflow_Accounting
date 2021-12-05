@@ -1,7 +1,9 @@
 import enum
-import typing 
-from typing import Optional 
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
+import typing
+from typing import Optional
+
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
 
 
 class CompanyDetailSchema(BaseSchema):

@@ -1,9 +1,10 @@
-from typing import Optional
 import typing
-from core.models.tables import CompanyDetail
+from typing import Optional
+
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
 from pydantic import HttpUrl
-from core.schema.ModelOpreator.company import CompanySchemaOut
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
+
 
 class ProductSchema(BaseSchema):
     company_id:Optional[int]

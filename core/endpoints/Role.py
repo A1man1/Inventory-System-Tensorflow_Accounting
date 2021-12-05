@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from starlette.status import HTTP_204_NO_CONTENT
-from core.authentication import AuthHandler
-from core.schema.model_operation import RoleOperation
+from core.authentication import AuthHandler, JWTBearer
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.role import  RoleSchemaOut, RoleSchemaCreate
-from core.authentication import JWTBearer
+from core.schema.model_operation import RoleOperation
+from core.schema.ModelOpreator.role import RoleSchemaCreate, RoleSchemaOut
+from fastapi import APIRouter, Depends, HTTPException, status
+from starlette.status import HTTP_204_NO_CONTENT
+
 router = APIRouter(
     prefix="/role",
     tags=["Role"]

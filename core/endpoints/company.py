@@ -1,14 +1,15 @@
-import sys
 import pathlib
-from fastapi.security import HTTPBearer
-from fastapi import APIRouter, Depends, HTTPException, status, Security
-from starlette.status import HTTP_204_NO_CONTENT, HTTP_406_NOT_ACCEPTABLE
+import sys
 
-from core.authentication import AuthHandler , JWTBearer
-from core.schema.model_operation import CompanyDetailOperation, RoleOperation
+from core.authentication import AuthHandler, JWTBearer
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.company import compnaySchemaCreate, CompanySchemaOut
+from core.schema.model_operation import CompanyDetailOperation, RoleOperation
+from core.schema.ModelOpreator.company import (CompanySchemaOut,
+                                               compnaySchemaCreate)
+from fastapi import APIRouter, Depends, HTTPException, Security, status
+from fastapi.security import HTTPBearer
+from starlette.status import HTTP_204_NO_CONTENT, HTTP_406_NOT_ACCEPTABLE
 
 router = APIRouter(
     prefix="/company",

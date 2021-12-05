@@ -1,9 +1,10 @@
-import typing 
+import typing
 from datetime import date
 from typing import Optional
 from uuid import uuid4
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
 
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
 
 
 class OrderSchema(BaseSchema):

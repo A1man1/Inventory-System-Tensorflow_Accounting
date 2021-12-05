@@ -1,7 +1,7 @@
-from databases import Database
-from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy
 from core.settings import Settings
+from databases import Database
+from sqlalchemy.ext.declarative import declarative_base
 from starlette.requests import Request
 
 

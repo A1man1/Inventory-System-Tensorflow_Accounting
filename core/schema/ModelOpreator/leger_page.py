@@ -1,9 +1,10 @@
-import typing 
+import typing
 from datetime import date
 from typing import Optional
-from core.schema.ModelOpreator.leger_book import LegerBookSchema
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
 
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
+from core.schema.ModelOpreator.leger_book import LegerBookSchema
 
 
 class LegerPageSchema(BaseSchema):

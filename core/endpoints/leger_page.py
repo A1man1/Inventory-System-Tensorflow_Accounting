@@ -1,14 +1,15 @@
 from datetime import date, datetime
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
-from core.authentication import AuthHandler
-from core.schema.model_operation import LegerPageOperation
+
+from core.authentication import AuthHandler, JWTBearer
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.leger_page import LegerPageSchemaOut , LegerPageSchemaCreate
+from core.schema.model_operation import LegerPageOperation
+from core.schema.ModelOpreator.leger_page import (LegerPageSchemaCreate,
+                                                  LegerPageSchemaOut)
 from core.schema.trie import Trie
 from core.schema.util import try_parsing_date
-from core.authentication import  JWTBearer
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter(
     prefix="/leger_page",
