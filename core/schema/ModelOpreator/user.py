@@ -1,6 +1,6 @@
 from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
 from datetime import date
-from typing import Optional
+from typing import Any, Dict, Optional
 import typing 
 from pydantic import ValidationError, validator
 
@@ -55,3 +55,9 @@ class UserSchemaOut(UserSchemaInDB):
     permission:Optional[typing.List[int]]
 
 
+class UserLoginSchema(BaseSchema):
+    email:str
+    passd:str
+
+class LoginOut(BaseSchema):
+     access_token:str

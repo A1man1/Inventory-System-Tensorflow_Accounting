@@ -5,7 +5,7 @@ from core.schema.model_operation import RoleOperation
 from core.config import log
 from core.schema import util
 from core.schema.ModelOpreator.role import  RoleSchemaOut, RoleSchemaCreate
-
+from core.authentication import JWTBearer
 router = APIRouter(
     prefix="/role",
     tags=["Role"]
@@ -18,7 +18,7 @@ router = APIRouter(
 role_repo: RoleOperation = RoleOperation()
 
 
-@router.get("/", name="userlist:fetch_user_list")
+@router.get("/", dependencies=[Depends(JWTBearer('Admin'))],name="userlist:fetch_user_list")
 # , current_user=Depends(auth_handler.authorize)):
 async def role_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of role
@@ -56,7 +56,7 @@ async def role_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{role_id}", name="role detials:fetch_role_by_id",response_model=RoleSchemaOut)
+@router.get("/{role_id}",dependencies=[Depends(JWTBearer('Admin'))], name="role detials:fetch_role_by_id",response_model=RoleSchemaOut)
 async def get_app_provider_by_id(role_id: int): #,current_user=Depends(auth_handler.authorize)):
     """Fetch Role by ID
 
@@ -81,7 +81,7 @@ async def get_app_provider_by_id(role_id: int): #,current_user=Depends(auth_hand
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.post("/", name="create_register_role",response_model=RoleSchemaOut,status_code=status.HTTP_201_CREATED)
+@router.post("/", name="create_register_role",dependencies=[Depends(JWTBearer('Admin'))],response_model=RoleSchemaOut,status_code=status.HTTP_201_CREATED)
 async def create_app_provider(app: RoleSchemaCreate):#, current_user=Depends(auth_handler.authorize)):
     """Create new Role
 
@@ -107,7 +107,7 @@ async def create_app_provider(app: RoleSchemaCreate):#, current_user=Depends(aut
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{role_id}", name="role:update_role_data_by_id",response_model=RoleSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{role_id}", dependencies=[Depends(JWTBearer('Admin'))],name="role:update_role_data_by_id",response_model=RoleSchemaOut,status_code=status.HTTP_202_ACCEPTED)
 async def update_app_provider(role_id: int, app: RoleSchemaCreate): #, current_user=Depends(auth_handler.authorize)):
     """Update Role object
 
@@ -133,7 +133,7 @@ async def update_app_provider(role_id: int, app: RoleSchemaCreate): #, current_u
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{role_id}", name="role:delete_role_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{role_id}", dependencies=[Depends(JWTBearer('Admin'))], name="role:delete_role_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_app_provider_by_id(app_provider_id: int): #, current_user=Depends(auth_handler.authorize)):
     """Delete Role
 

@@ -7,7 +7,8 @@ from core.config import log
 from core.schema import util
 from core.schema.ModelOpreator.leger_page import LegerPageSchemaOut , LegerPageSchemaCreate
 from core.schema.trie import Trie
-from core.schema.util import filter_by_issue , try_parsing_date
+from core.schema.util import try_parsing_date
+from core.authentication import  JWTBearer
 
 router = APIRouter(
     prefix="/leger_page",
@@ -23,7 +24,7 @@ trie_ins_title = Trie()
 legerpage: LegerPageOperation = LegerPageOperation()
 
 
-@router.get("/", name="leger_pagelist:fetch_leger_page_list")
+@router.get("/", dependencies=[Depends(JWTBearer(100))] , name="leger_pagelist:fetch_leger_page_list")
 # , current_leger_page=Depends(auth_handler.authorize)):
 async def leger_page_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of leger_page
@@ -61,7 +62,7 @@ async def leger_page_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{leger_page_id}", name="leger_page detials:fetch_leger_page_by_id",response_model=LegerPageSchemaOut)
+@router.get("/{leger_page_id}", dependencies=[Depends(JWTBearer(16))], name="leger_page detials:fetch_leger_page_by_id",response_model=LegerPageSchemaOut)
 async def get_leger_page_by_id(leger_page_id: int): #,current_leger_page=Depends(auth_handler.authorize)):
     """Fetch leger_page by ID
 
@@ -86,7 +87,7 @@ async def get_leger_page_by_id(leger_page_id: int): #,current_leger_page=Depends
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/company", name="leger_page detials:fetch_leger_page_by_company_id")
+@router.get("/company", dependencies=[Depends(JWTBearer(16))],name="leger_page detials:fetch_leger_page_by_company_id")
 async def get_leger_page_by_company_id(company_id: int, title:Optional[str]=None, issue_finished:Optional[bool]=None, date:Optional[date]=None): #,current_leger_page=Depends(auth_handler.authorize)):
     """Fetch leger_page by ID
 
@@ -138,7 +139,7 @@ async def get_leger_page_by_company_id(company_id: int, title:Optional[str]=None
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.post("/", name="create_leger_page",response_model=LegerPageSchemaOut,status_code=status.HTTP_201_CREATED)
+@router.post("/", dependencies=[Depends(JWTBearer(4))],name="create_leger_page",response_model=LegerPageSchemaOut,status_code=status.HTTP_201_CREATED)
 async def create_leger_page(app: LegerPageSchemaCreate):#, current_leger_page=Depends(auth_handler.authorize)):
     """Create new leger_page
 
@@ -163,7 +164,7 @@ async def create_leger_page(app: LegerPageSchemaCreate):#, current_leger_page=De
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{leger_page_id}", name="leger_page:update_leger_page_data_by_id",response_model=LegerPageSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{leger_page_id}", dependencies=[Depends(JWTBearer(8))],  name="leger_page:update_leger_page_data_by_id",response_model=LegerPageSchemaOut,status_code=status.HTTP_202_ACCEPTED)
 async def update_leger_page(leger_page_id: int, app: LegerPageSchemaCreate): #, current_leger_page=Depends(auth_handler.authorize)):
     """Update leger_page object
 
@@ -189,7 +190,7 @@ async def update_leger_page(leger_page_id: int, app: LegerPageSchemaCreate): #, 
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{leger_page_id}", name="leger_page:delete_leger_page_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{leger_page_id}", dependencies=[Depends(JWTBearer(10))], name="leger_page:delete_leger_page_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_leger_page_by_id(leger_page_id: int): #, current_leger_page=Depends(auth_handler.authorize)):
     """Delete leger_page
 

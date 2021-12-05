@@ -6,8 +6,8 @@ from core.authentication import AuthHandler
 from core.schema.model_operation import UserOperation
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.user import  UserSchemaOut , UserSchemaCreate
-
+from core.schema.ModelOpreator.user import  LoginOut, UserSchemaOut , UserSchemaCreate , UserLoginSchema
+from core.authentication import JWTBearer
 router = APIRouter(
     prefix="/users",
     tags=["Users"]
@@ -20,8 +20,7 @@ auth_handler: AuthHandler = AuthHandler()
 user_repo: UserOperation = UserOperation()
 
 
-@router.get("/", name="userlist:fetch_user_list")
-# , current_user=Depends(auth_handler.authorize)):
+@router.get("/", dependencies=[Depends(JWTBearer(100))],name="userlist:fetch_user_list")
 async def user_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of user
 
@@ -58,8 +57,8 @@ async def user_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{user_id}", name="user detials:fetch_user_by_id",response_model=UserSchemaOut)
-async def get_user_by_id(user_id: int): #,current_user=Depends(auth_handler.authorize)):
+@router.get("/{user_id}", dependencies=[Depends(JWTBearer(52))],name="user detials:fetch_user_by_id",response_model=UserSchemaOut)
+async def get_user_by_id(user_id: int):
     """Fetch Users by ID
 
     Args:
@@ -83,7 +82,7 @@ async def get_user_by_id(user_id: int): #,current_user=Depends(auth_handler.auth
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/company/", name="user detials:fetch_user_by_company_id")
+@router.get("/company/", dependencies=[Depends(JWTBearer(52))],name="user detials:fetch_user_by_company_id")
 async def get_user_by_company_id(company_id: int): #,current_user=Depends(auth_handler.authorize)):
     """Fetch Users by company Name
 
@@ -108,7 +107,7 @@ async def get_user_by_company_id(company_id: int): #,current_user=Depends(auth_h
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/assgin/", name="update permission",response_model=UserSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+@router.put("/assgin/", dependencies=[Depends(JWTBearer(60))],name="update permission",response_model=UserSchemaOut,status_code=status.HTTP_202_ACCEPTED)
 async def get_user_by_update_permission(user_id:int, permission:Optional[typing.List[int]]=None): #,current_user=Depends(auth_handler.authorize)):
     """
     Updating user permission
@@ -135,7 +134,7 @@ async def get_user_by_update_permission(user_id:int, permission:Optional[typing.
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/activate/", name="activate user profile",response_model=UserSchemaOut, status_code=status.HTTP_202_ACCEPTED)
+@router.put("/activate/", dependencies=[Depends(JWTBearer(50))],name="activate user profile",response_model=UserSchemaOut, status_code=status.HTTP_202_ACCEPTED)
 async def get_user_by_company_id(user_id:int): #,current_user=Depends(auth_handler.authorize)):
     """
     activate user 
@@ -160,7 +159,7 @@ async def get_user_by_company_id(user_id:int): #,current_user=Depends(auth_handl
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/assign_role/", name="assign role user",response_model=UserSchemaOut, status_code=status.HTTP_202_ACCEPTED)
+@router.put("/assign_role/", dependencies=[Depends(JWTBearer(56))],name="assign role user",response_model=UserSchemaOut, status_code=status.HTTP_202_ACCEPTED)
 async def get_user_by_company_id(user_id:int, role_id_type:int): #,current_user=Depends(auth_handler.authorize)):
     """
     activate user 
@@ -186,8 +185,8 @@ async def get_user_by_company_id(user_id:int, role_id_type:int): #,current_user=
 
 
 
-@router.post("/", name="register_user",response_model=UserSchemaOut,status_code=status.HTTP_201_CREATED)
-async def create_user(app: UserSchemaCreate):#, current_user=Depends(auth_handler.authorize)):
+@router.post("/",name="register_user",response_model=UserSchemaOut,status_code=status.HTTP_201_CREATED)
+async def create_user(app: UserSchemaCreate):
     """Create new Users
 
     Args:
@@ -211,8 +210,8 @@ async def create_user(app: UserSchemaCreate):#, current_user=Depends(auth_handle
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{user_id}", name="user:update_user_data_by_id",response_model=UserSchemaOut,status_code=status.HTTP_202_ACCEPTED)
-async def update_user(user_id: int, app: UserSchemaCreate): #, current_user=Depends(auth_handler.authorize)):
+@router.put("/{user_id}", dependencies=[Depends(JWTBearer(50))],name="user:update_user_data_by_id",response_model=UserSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+async def update_user(user_id: int, app: UserSchemaCreate): 
     """Update Users object
 
     Args:
@@ -237,8 +236,8 @@ async def update_user(user_id: int, app: UserSchemaCreate): #, current_user=Depe
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{user_id}", name="user:delete_user_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user_by_id(user_id: int): #, current_user=Depends(auth_handler.authorize)):
+@router.delete("/{user_id}", dependencies=[Depends(JWTBearer(50))],name="user:delete_user_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user_by_id(user_id: int): 
     """Delete Users
 
     Args:
@@ -252,7 +251,7 @@ async def delete_user_by_id(user_id: int): #, current_user=Depends(auth_handler.
         None: No content with 204 status code
     """
     try:
-        return await user_repo.delete_by_id(user_id)
+        return await user_repo.deactive_to_account(user_id)
 
     except Exception as err:
         log.error(err)
@@ -262,8 +261,8 @@ async def delete_user_by_id(user_id: int): #, current_user=Depends(auth_handler.
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/authenticate/", name="encrypted authorize", status_code=status.HTTP_200_OK)
-async def authenticate(user:str, passwd:str):
+@router.post("/authenticate/", name="encrypted authorize",response_model=LoginOut,status_code=status.HTTP_202_ACCEPTED)
+async def authenticate(login_data:UserLoginSchema):
     """
     activate user 
     
@@ -277,7 +276,7 @@ async def authenticate(user:str, passwd:str):
         Users: Fetched Users object.
     """
     try:
-        return await  auth_handler.login(user,passwd)
+        return await  auth_handler.login(login_data)
 
     except Exception as err:
         log.error(err)

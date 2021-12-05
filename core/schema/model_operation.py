@@ -119,8 +119,9 @@ class PurchaseOperation(BaseRepository):
     def _schema_update(self) -> Type[purchase.PurchaseSchemaUpdate]:
         return purchase.PurchaseSchemaUpdate
 
-    async def fetch_by_suppiler_id(self, suppiler_id: int):
-        query = self._table.select().where(self._table.c.suppiler_id == suppiler_id)
+    async def fetch_by_suppiler_id(self, suppiler_id: int , company_id:int):
+        query = self._table.select().where(self._table.c.suppiler_id == suppiler_id 
+        and self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
@@ -129,13 +130,17 @@ class PurchaseOperation(BaseRepository):
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
-    async def fetch_by_purchase_date(self, purchsase_date: Date):
-        query = self._table.select().where(self._table.c.purchsase_date == purchsase_date)
+    async def fetch_by_purchase_date(self, purchsase_date: Date ,company_id:int):
+        query = self._table.select().where(self._table.c.purchsase_date == purchsase_date 
+        and self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
-    
-
+    async def fetch_parchase_by_company_id(self,purchase_id:int,company_id:int):
+        query= self._table.select().where(self._table.c.id == purchase_id and 
+        self._table.c.company_id == company_id)
+        rows = await self._db.fetch_all(query=query)
+        return [self._schema_out(**dict(row.items())) for row in rows]
 
 class OrdersOperation(BaseRepository):
     @property
@@ -154,8 +159,9 @@ class OrdersOperation(BaseRepository):
     def _schema_update(self) -> Type[order.OrderSchemaUpdate]:
         return order.OrderSchemaUpdate
 
-    async def fetch_by_product_id(self, product_id: int):
-        query = self._table.select().where(self._table.c.product_id == product_id)
+    async def fetch_by_product_id(self, product_id: int, company_id:int):
+        query = self._table.select().where(self._table.c.product_id == product_id and 
+        self._table.c.compnay_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
@@ -275,6 +281,12 @@ class UserOperation(BaseRepository):
         rows = await self.fetch_by_id(user_id)
         return rows
     
+    async def deactive_to_account(self,user_id):
+        query = self._table.update().where(self._table.c.id == user_id).values(is_active=False)
+        await self._db.execute(query=query)
+        rows = await self.fetch_by_id(user_id)
+        return rows
+    
     async def assign_role_to_account(self,user_id:int, role_type : int):
         query = self._table.update().where(self._table.c.id == user_id).values(role_type=role_type)
         await self._db.execute(query=query)
@@ -306,7 +318,7 @@ class RoleOperation(BaseRepository):
     def _schema_update(self) -> Type[role.RoleSchemaUpdate]:
         return role.RoleSchemaUpdate
 
-    async def fetch_by_role_id(self, role_id: int):
-        query = self._table.select().where(self._table.c.id == role_id)
+    async def fetch_by_role_id(self, role_id: int , company_id:int):
+        query = self._table.select().where(self._table.c.id == role_id and self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]

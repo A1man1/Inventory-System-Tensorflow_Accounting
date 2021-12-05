@@ -8,7 +8,7 @@ from core.schema import util
 from core.schema.ModelOpreator.supplier import   SuppilersSchemaOut, SuppilersSchemaCreate
 from typing import Optional
 from core.schema.trie import Trie
-
+from core.authentication import JWTBearer
 
 router = APIRouter(
     prefix="/suppiler",
@@ -24,7 +24,7 @@ trie_ins = Trie()
 suppiler_repo: SuppilerOperation = SuppilerOperation()
 
 
-@router.get("/", name="suppilerlist:fetch_suppiler_list")
+@router.get("/",dependencies=[Depends(JWTBearer(100))], name="suppilerlist:fetch_suppiler_list")
 # , current_suppiler=Depends(auth_handler.authorize)):
 async def suppiler_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of suppiler
@@ -62,8 +62,8 @@ async def suppiler_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{suppiler_id}", name="suppiler detials:fetch_suppiler_by_id",response_model=SuppilersSchemaOut)
-async def get_suppiler_by_id(suppiler_id: int): #,current_suppiler=Depends(auth_handler.authorize)):
+@router.get("/{suppiler_id}", dependencies=[Depends(JWTBearer(34))],name="suppiler detials:fetch_suppiler_by_id",response_model=SuppilersSchemaOut)
+async def get_suppiler_by_id(suppiler_id: int): 
     """Fetch suppiler by ID
 
     Args:
@@ -87,8 +87,8 @@ async def get_suppiler_by_id(suppiler_id: int): #,current_suppiler=Depends(auth_
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/suppilers/", name="suppiler detials:company suppiler list and search name")
-async def get_suppiler_by_company_and_search(company_id:int,suppiler_name:Optional[str] = None): #,current_suppiler=Depends(auth_handler.authorize)):
+@router.get("/suppilers/", dependencies=[Depends(JWTBearer(34))],name="suppiler detials:company suppiler list and search name")
+async def get_suppiler_by_company_and_search(company_id:int,suppiler_name:Optional[str] = None): 
     """Fetch suppiler by ID
 
     Args:
@@ -118,8 +118,8 @@ async def get_suppiler_by_company_and_search(company_id:int,suppiler_name:Option
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/name/", name="suppiler detials:fetch_suppiler_by_name")
-async def get_suppiler_supper_by_name(suppiler_name:str): #,current_suppiler=Depends(auth_handler.authorize)):
+@router.get("/name/", dependencies=[Depends(JWTBearer(34))],name="suppiler detials:fetch_suppiler_by_name")
+async def get_suppiler_supper_by_name(suppiler_name:str): 
     """Fetch suppiler by NAME
 
     Args:
@@ -144,8 +144,8 @@ async def get_suppiler_supper_by_name(suppiler_name:str): #,current_suppiler=Dep
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/products/", name="suppiler detials:fetch_suppiler_product_by_name")
-async def get_suppiler_product_list(suppiler_id:int , company_id:int): #,current_suppiler=Depends(auth_handler.authorize)):
+@router.get("/products/", dependencies=[Depends(JWTBearer(34))],name="suppiler detials:fetch_suppiler_product_by_name")
+async def get_suppiler_product_list(suppiler_id:int , company_id:int): 
     """Fetch suppiler by name
 
     Args:
@@ -172,8 +172,8 @@ async def get_suppiler_product_list(suppiler_id:int , company_id:int): #,current
 
 
 
-@router.post("/", name="create_suppiler",response_model=SuppilersSchemaOut,status_code=status.HTTP_201_CREATED)
-async def create_suppiler(app: SuppilersSchemaCreate):#, current_suppiler=Depends(auth_handler.authorize)):
+@router.post("/", dependencies=[Depends(JWTBearer(32))], name="create_suppiler",response_model=SuppilersSchemaOut,status_code=status.HTTP_201_CREATED)
+async def create_suppiler(app: SuppilersSchemaCreate):
     """Create new suppiler
 
     Args:
@@ -197,8 +197,8 @@ async def create_suppiler(app: SuppilersSchemaCreate):#, current_suppiler=Depend
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{suppiler_id}", name="suppiler:update_suppiler_data_by_id",response_model=SuppilersSchemaOut,status_code=status.HTTP_202_ACCEPTED)
-async def update_suppiler(suppiler_id: int, app: SuppilersSchemaCreate): #, current_suppiler=Depends(auth_handler.authorize)):
+@router.put("/{suppiler_id}", dependencies=[Depends(JWTBearer(38))] , name="suppiler:update_suppiler_data_by_id",response_model=SuppilersSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+async def update_suppiler(suppiler_id: int, app: SuppilersSchemaCreate): 
     """Update suppiler object
 
     Args:
@@ -223,8 +223,8 @@ async def update_suppiler(suppiler_id: int, app: SuppilersSchemaCreate): #, curr
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{suppiler_id}", name="suppiler:delete_suppiler_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
-async def delete_suppiler_by_id(suppiler_id: int): #, current_suppiler=Depends(auth_handler.authorize)):
+@router.delete("/{suppiler_id}", dependencies=[Depends(JWTBearer(36))], name="suppiler:delete_suppiler_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+async def delete_suppiler_by_id(suppiler_id: int): 
     """Delete suppiler
 
     Args:

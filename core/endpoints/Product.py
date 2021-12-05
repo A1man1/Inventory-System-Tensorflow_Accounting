@@ -2,12 +2,12 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.status import HTTP_204_NO_CONTENT, HTTP_406_NOT_ACCEPTABLE
 from core.authentication import AuthHandler
-from core.schema.model_operation import ProductOperation
+from core.schema.model_operation import ProductOperation, RoleOperation
 from core.config import log
 from core.schema import util
 from core.schema.ModelOpreator.product import  ProductSchemaOut, ProductSchemaCreate
 from core.schema.trie import Trie
-
+from core.authentication import JWTBearer
 
 router = APIRouter(
     prefix="/product",
@@ -22,7 +22,7 @@ trie_ins = Trie()
 product_repo: ProductOperation = ProductOperation()
 
 
-@router.get("/", name="productlist:fetch_product_list")
+@router.get("/", dependencies=[Depends(JWTBearer(100))], name="productlist:fetch_product_list")
 # , current_product=Depends(auth_handler.authorize)):
 async def product_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of product
@@ -60,8 +60,8 @@ async def product_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{product_id}", name="product detials:fetch_product_by_id",response_model=ProductSchemaOut)
-async def get_product_by_id(product_id: int): #,current_product=Depends(auth_handler.authorize)):
+@router.get("/{product_id}",dependencies=[Depends(JWTBearer(100))], name="product detials:fetch_product_by_id",response_model=ProductSchemaOut)
+async def get_product_by_id(product_id: int):
     """Fetch App provider by ID
 
     Args:
@@ -85,8 +85,8 @@ async def get_product_by_id(product_id: int): #,current_product=Depends(auth_han
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.get("/company/", name="product detials:fetch_product_by_company_id_search_product")
-async def get_product_by_company_id_search_product(company_id: int, product_name:Optional[str]=None): #,current_product=Depends(auth_handler.authorize)):
+@router.get("/company/", dependencies=[Depends(JWTBearer(20))],name="product detials:fetch_product_by_company_id_search_product")
+async def get_product_by_company_id_search_product(company_id: int, product_name:Optional[str]=None):
     """Fetch App provider by Name
 
     Args:
@@ -122,8 +122,8 @@ async def get_product_by_company_id_search_product(company_id: int, product_name
 
 
 
-@router.get("/name/", name="product detials:fetch_product_by_name")
-async def get_product_by_name(product_name: str, company_id:int): #,current_product=Depends(auth_handler.authorize)):
+@router.get("/name/", dependencies=[Depends(JWTBearer(20))],name="product detials:fetch_product_by_name")
+async def get_product_by_name(product_name: str, company_id:int):
     """Fetch App provider by Name
 
     Args:
@@ -150,7 +150,7 @@ async def get_product_by_name(product_name: str, company_id:int): #,current_prod
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.post("/", name="create_register_product",response_model=ProductSchemaOut,status_code=status.HTTP_201_CREATED)
+@router.post("/", name="create_register_product",dependencies=[Depends(JWTBearer(18))],response_model=ProductSchemaOut,status_code=status.HTTP_201_CREATED)
 async def create_product(app: ProductSchemaCreate):#, current_product=Depends(auth_handler.authorize)):
     """Create new App provider
 
@@ -175,7 +175,7 @@ async def create_product(app: ProductSchemaCreate):#, current_product=Depends(au
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{product_id}", name="product:update_product_data_by_id",response_model=ProductSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{product_id}", dependencies=[Depends(JWTBearer(24))],name="product:update_product_data_by_id",response_model=ProductSchemaOut,status_code=status.HTTP_202_ACCEPTED)
 async def update_product(product_id: int, app: ProductSchemaCreate): #, current_product=Depends(auth_handler.authorize)):
     """Update App provider object
 
@@ -201,7 +201,7 @@ async def update_product(product_id: int, app: ProductSchemaCreate): #, current_
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{product_id}", name="product:delete_product_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{product_id}",dependencies=[Depends(JWTBearer(22))],name="product:delete_product_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product_by_id(product_id: int): #, current_product=Depends(auth_handler.authorize)):
     """Delete app provider
 

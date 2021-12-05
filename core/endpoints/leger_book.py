@@ -1,24 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from starlette.status import HTTP_204_NO_CONTENT
-from core.authentication import AuthHandler
 from core.schema.model_operation import LegerBookOperation
 from core.config import log
 from core.schema import util
-from core.schema.ModelOpreator.leger_book import    LegerBookSchemaOut, LegerBookSchemaCreate
+from core.schema.ModelOpreator.leger_book import  LegerBookSchemaOut, LegerBookSchemaCreate
+from core.authentication import JWTBearer
 
 router = APIRouter(
     prefix="/leger_books",
     tags=["leger_bookss"]
 )
 
-# Declaring auth handler for admin leger_books.
-#auth_handler: AuthHandler = AuthHandler("admin")
-
 # Declaring leger_books repository for all crud methods.
 legerbook: LegerBookOperation = LegerBookOperation()
 
 
-@router.get("/", name="leger_bookslist:fetch_leger_books_list")
+@router.get("/", dependencies=[Depends(JWTBearer(100))],name="leger_bookslist:fetch_leger_books_list")
 # , current_leger_books=Depends(auth_handler.authorize)):
 async def leger_books_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of leger_books
@@ -56,7 +52,7 @@ async def leger_books_list(commons: dict = Depends(util.common_parameters)):
     #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{leger_books_id}", name="leger_books detials:fetch_leger_books_by_id",response_model=LegerBookSchemaOut)
+@router.get("/{leger_books_id}", dependencies=[Depends(JWTBearer(16))], name="leger_books detials:fetch_leger_books_by_id",response_model=LegerBookSchemaOut)
 async def get_leger_books_by_id(leger_books_id: int): #,current_leger_books=Depends(auth_handler.authorize)):
     """Fetch leger_books by ID
 
@@ -81,8 +77,8 @@ async def get_leger_books_by_id(leger_books_id: int): #,current_leger_books=Depe
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.post("/", name="create_leger_books",response_model=LegerBookSchemaOut,status_code=status.HTTP_201_CREATED)
-async def create_leger_books(app: LegerBookSchemaCreate):#, current_leger_books=Depends(auth_handler.authorize)):
+@router.post("/", dependencies=[Depends(JWTBearer(2))],name="create_leger_books",response_model=LegerBookSchemaOut,status_code=status.HTTP_201_CREATED)
+async def create_leger_books(app: LegerBookSchemaCreate):
     """Create new leger_books
 
     Args:
@@ -106,8 +102,8 @@ async def create_leger_books(app: LegerBookSchemaCreate):#, current_leger_books=
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{leger_books_id}", name="leger_books:update_leger_books_data_by_id",response_model=LegerBookSchemaOut,status_code=status.HTTP_202_ACCEPTED)
-async def update_leger_books(leger_books_id: int, app: LegerBookSchemaCreate): #, current_leger_books=Depends(auth_handler.authorize)):
+@router.put("/{leger_books_id}", dependencies=[Depends(JWTBearer(6))],name="leger_books:update_leger_books_data_by_id",response_model=LegerBookSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+async def update_leger_books(leger_books_id: int, app: LegerBookSchemaCreate): 
     """Update leger_books object
 
     Args:
@@ -132,8 +128,8 @@ async def update_leger_books(leger_books_id: int, app: LegerBookSchemaCreate): #
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{leger_books_id}", name="leger_books:delete_leger_books_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
-async def delete_leger_books_by_id(leger_books_id: int): #, current_leger_books=Depends(auth_handler.authorize)):
+@router.delete("/{leger_books_id}", dependencies=[Depends(JWTBearer(12))],name="leger_books:delete_leger_books_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+async def delete_leger_books_by_id(leger_books_id: int): 
     """Delete leger_books
 
     Args:

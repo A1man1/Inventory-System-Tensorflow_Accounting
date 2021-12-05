@@ -5,19 +5,23 @@ class _Permission:
     SUPPILERS= {32:"create_suppiler",34:"view_suppiler",36:"delete_suppiler",38:"edit_suppiler"}
     ORDERS=    {40:"create_order",42:"view_order",44:"delete_order",46:"edit_order"}
     PURCHASE=  {26:"create_purchase",27:"view_purchase",28:"delete_purchase",30:"edit_purchase"}
+    COMPANY=   {55:"edit_company"}
     __all_over= dict.update(LEGER)
     __all_over= dict.update(ACCOUNT_ROLE_HANDLING)
     __all_over= dict.update(PRODUCTS)
     __all_over= dict.update(ORDERS)
     __all_over= dict.update(PURCHASE)
     __all_over= dict.update(SUPPILERS)
+    __all_over=dict.update(COMPANY)
 
-class _Schema_Admin(_Permission):
+class _Schema_Admin():
     def __init__(self) -> None:
         super().__init__()
     
     def admin_permit(self):
-        return self.__all_over
+        return 'd'
+    def Schema_name(self):
+        return "SUPER_ADMIN"
 
 class userAdmin(_Permission):
     def __init__(self) -> None:

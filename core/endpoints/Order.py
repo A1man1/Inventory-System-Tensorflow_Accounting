@@ -5,6 +5,7 @@ from core.schema.model_operation import OrdersOperation
 from core.config import log
 from core.schema import util
 from core.schema.ModelOpreator.order import  OrderSchemaOut, OrderSchemaCreate
+from core.authentication import JWTBearer
 
 router = APIRouter(
     prefix="/order",
@@ -18,8 +19,8 @@ router = APIRouter(
 order_repo: OrdersOperation = OrdersOperation()
 
 
-@router.get("/", name="orderlist:fetch_order_list")
-# , current_order=Depends(auth_handler.authorize)):
+@router.get("/",dependencies=[Depends(JWTBearer(100))], name="orderlist:fetch_order_list")
+
 async def order_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of order
 
@@ -52,12 +53,10 @@ async def order_list(commons: dict = Depends(util.common_parameters)):
         else:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
-    # else:
-    #    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail=f"detial: {'You are not authorized this area!'}")
 
 
-@router.get("/{order_id}", name="order detials:fetch_order_by_id",response_model=OrderSchemaOut)
-async def get_order_by_id(order_id: int): #,current_order=Depends(auth_handler.authorize)):
+@router.get("/{order_id}", dependencies=[Depends(JWTBearer(100))],name="order detials:fetch_order_by_id",response_model=OrderSchemaOut)
+async def get_order_by_id(order_id: int): 
     """Fetch order by ID
 
     Args:
@@ -81,7 +80,59 @@ async def get_order_by_id(order_id: int): #,current_order=Depends(auth_handler.a
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.post("/", name="create_order",response_model=OrderSchemaOut,status_code=status.HTTP_201_CREATED)
+@router.get("/company/", dependencies=[Depends(JWTBearer(42))],name="order detials:fetch_order_by_id",response_model=OrderSchemaOut)
+async def get_order_by_company_id(order_id: int,company_id:int):
+    """Fetch order by ID and company ID
+
+    Args:
+        order_id (int): order id
+        company_id (int): company id
+        current_order (order, optional): Request order object. Defaults to Depends(auth_handler.authorize).
+
+    Raises:
+        HTTPException: Exception if some error occurred with proper status code
+
+    Returns:
+        order: Fetched order object.
+    """
+    try:
+        return await order_repo.fetch_by_company_id(order_id,company_id)
+
+    except Exception as err:
+        log.error(err)
+        if hasattr(err, 'status_code'):
+            raise HTTPException(status_code=err.status_code, detail=err.detail)
+        else:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
+
+
+@router.get("/product/", dependencies=[Depends(JWTBearer(42))],name="order detials:fetch_order_by_product_id",response_model=OrderSchemaOut)
+async def get_order_by_product_id(product_id:int, company_id:int):
+    """Fetch order by Product ID and company ID
+
+    Args:
+        product_id (int): Product id
+        company_id (int): company id
+        current_order (order, optional): Request order object. Defaults to Depends(auth_handler.authorize).
+
+    Raises:
+        HTTPException: Exception if some error occurred with proper status code
+
+    Returns:
+        order: Fetched order object.
+    """
+    try:
+        return await order_repo.fetch_by_product_id(product_id,company_id)
+
+    except Exception as err:
+        log.error(err)
+        if hasattr(err, 'status_code'):
+            raise HTTPException(status_code=err.status_code, detail=err.detail)
+        else:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
+
+
+@router.post("/", dependencies=[Depends(JWTBearer(40))],name="create_order",response_model=OrderSchemaOut,status_code=status.HTTP_201_CREATED)
 async def create_order(app: OrderSchemaCreate):#, current_order=Depends(auth_handler.authorize)):
     """Create new order
 
@@ -107,7 +158,7 @@ async def create_order(app: OrderSchemaCreate):#, current_order=Depends(auth_han
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.put("/{order_id}", name="order:update_order_data_by_id",response_model=OrderSchemaOut,status_code=status.HTTP_202_ACCEPTED)
+@router.put("/{order_id}", dependencies=[Depends(JWTBearer(46))], name="order:update_order_data_by_id",response_model=OrderSchemaOut,status_code=status.HTTP_202_ACCEPTED)
 async def update_order(order_id: int, app: OrderSchemaCreate): #, current_order=Depends(auth_handler.authorize)):
     """Update order object
 
@@ -133,7 +184,7 @@ async def update_order(order_id: int, app: OrderSchemaCreate): #, current_order=
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Error Msg: { err }")
 
 
-@router.delete("/{order_id}", name="order:delete_order_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{order_id}", dependencies=[Depends(JWTBearer(44))],name="order:delete_order_info_by_id",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_order_by_id(order_id: int): #, current_order=Depends(auth_handler.authorize)):
     """Delete order
 

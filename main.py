@@ -1,8 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_contrib.auth.backends import AuthBackend
-from fastapi_contrib.auth.middlewares import AuthenticationMiddleware
 from fastapi_contrib.common.middlewares import StateRequestIDMiddleware
 from fastapi_contrib.exception_handlers import setup_exception_handlers
 from fastapi_contrib.routes import ValidationErrorLoggingRoute
@@ -39,10 +37,6 @@ def get_application():
     )
     BaseConfig.validate_all= False
     BaseConfig.arbitrary_types_allowed=True
-    app.add_middleware(
-        AuthenticationMiddleware, 
-        backend=AuthBackend()
-    )
     app.add_middleware(
         StateRequestIDMiddleware,
     )
