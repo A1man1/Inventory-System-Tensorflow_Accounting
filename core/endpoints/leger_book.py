@@ -16,7 +16,6 @@ legerbook: LegerBookOperation = LegerBookOperation()
 
 
 @router.get("/", dependencies=[Depends(JWTBearer(100))],name="leger_bookslist:fetch_leger_books_list")
-# , current_leger_books=Depends(auth_handler.authorize)):
 async def leger_books_list(commons: dict = Depends(util.common_parameters)):
     """Fetch list of leger_books
 
@@ -54,7 +53,7 @@ async def leger_books_list(commons: dict = Depends(util.common_parameters)):
 
 
 @router.get("/{leger_books_id}", dependencies=[Depends(JWTBearer(16))], name="leger_books detials:fetch_leger_books_by_id",response_model=LegerBookSchemaOut)
-async def get_leger_books_by_id(leger_books_id: int): #,current_leger_books=Depends(auth_handler.authorize)):
+async def get_leger_books_by_id(leger_books_id: int): 
     """Fetch leger_books by ID
 
     Args:

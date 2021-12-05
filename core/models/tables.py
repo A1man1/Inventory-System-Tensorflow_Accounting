@@ -4,7 +4,7 @@ from uuid import uuid1, uuid3, uuid4
 from core.dbconfig.db_engin import metadata
 from sqlalchemy import (Boolean, Column, Date, DateTime, Integer, String,
                         Table, Text)
-from sqlalchemy.sql.functions import current_date, current_time, now
+from sqlalchemy.sql.functions import current_date, current_time, current_timestamp, now
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import ARRAY, Enum, Float
 #from sqlalchemy_imageattach.entity import Image ,  image_attachment
@@ -41,7 +41,7 @@ Product=Table(
     ,Column("minimum_required",Integer,nullable=True)
     ,Column("modified_date",Date,default=datetime.today(),nullable=True)
     ,Column('product_image',URLType)
-    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(), server_default=now(), nullable=False))
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
  
 
 Suppilers=Table(
@@ -57,7 +57,7 @@ Suppilers=Table(
     ,Column("email",String, unique=True)
     ,Column ("contact_number",ARRAY(String))
     ,Column("company_id",ForeignKey('company_detail.id',ondelete="CASCADE"))
-    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(), server_default=now(), nullable=False))
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
 
 Purchase=Table(
     "purchase",metadata
@@ -67,7 +67,7 @@ Purchase=Table(
     ,Column("product_id",Integer,ForeignKey('product.id',ondelete="CASCADE"))
     ,Column("Number_of_recived",Integer,nullable=True)
     ,Column("Billno",String,nullable=False,server_default=str(uuid1().hex[:5])+str(date.year))
-    ,Column ("purchsase_date",Date,nullable=True, index=True))
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
 
 Order=Table(
     "order",metadata
@@ -80,7 +80,10 @@ Order=Table(
     ,Column("product_id",Integer,ForeignKey('product.id',ondelete="CASCADE"))
     ,Column("number_shipped",String,server_default=str(uuid4))
     ,Column("Order_number",String, server_default=str(uuid3))
-    ,Column("order_date",Date,default=current_time,nullable=True))
+    ,Column("order_date",Date,default=current_time,nullable=True)
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
+    
+    
 
 
 LegerBook=Table(
@@ -88,7 +91,8 @@ LegerBook=Table(
     ,Column("id",Integer,primary_key=True, index=True)
     ,Column("name",String, unique=True, nullable=False) 
     ,Column("company_id",Integer,ForeignKey('company_detail.id',ondelete="CASCADE"))
-    ,Column("year_declare",Integer,default=datetime.today().year))
+    ,Column("year_declare",Integer,default=datetime.today().year)
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
 
 
 Leger_page=Table(
@@ -101,7 +105,9 @@ Leger_page=Table(
     ,Column("billno",String, nullable=True)
     ,Column("total_amount",Integer, nullable=True)
     ,Column("balance_amount",Integer, nullable=True)
-    ,Column("issue_finised",Boolean, nullable=True))
+    ,Column("issue_finised",Boolean, nullable=True)
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
+
 
 Role=Table(
     "role",metadata
@@ -124,4 +130,6 @@ User=Table(
     ,Column("registered_date",Date,default=current_date)
     ,Column("permission",ARRAY(Integer,as_tuple=True),nullable=True)
     ,Column("passwd",String, nullable=False,server_default='abc@123')
-    ,Column("is_active", Boolean, nullable=False, server_default="False"))
+    ,Column("is_active", Boolean, nullable=False, server_default="False")
+    ,Column("last_modified_at", DateTime(timezone=True),onupdate=now(),server_default=now(),nullable=False))
+

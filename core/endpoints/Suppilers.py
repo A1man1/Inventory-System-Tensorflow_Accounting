@@ -1,6 +1,6 @@
 from typing import Optional
 
-from core.authentication import AuthHandler, JWTBearer
+from core.authentication import JWTBearer
 from core.config import log
 from core.schema import util
 from core.schema.model_operation import SuppilerOperation
@@ -8,8 +8,6 @@ from core.schema.ModelOpreator.supplier import (SuppilersSchemaCreate,
                                                 SuppilersSchemaOut)
 from core.schema.trie import Trie
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.sql.functions import user
-from starlette.status import HTTP_204_NO_CONTENT
 
 router = APIRouter(
     prefix="/suppiler",
@@ -18,8 +16,7 @@ router = APIRouter(
 
 #Trie 
 trie_ins = Trie()
-# Declaring auth handler for admin suppiler.
-#auth_handler: AuthHandler = AuthHandler("admin")
+
 
 # Declaring suppiler repository for all crud methods.
 suppiler_repo: SuppilerOperation = SuppilerOperation()

@@ -1,10 +1,10 @@
 import time
 
 import jwt
-from fastapi import Depends, HTTPException, Request, Security, status
+from fastapi import  HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from core.config import log, settings
+from core.config import log
 from core.Permission.permissin import _Schema_Admin
 from core.schema.model_operation import RoleOperation, UserOperation
 from core.schema.ModelOpreator.user import UserLoginSchema
@@ -29,7 +29,7 @@ class AuthHandler:
         try:
             load = await user_repo.authenticate(*dict(payload).values()) 
             load= dict(load[0])
-            load["expires"] =time.time() + 600
+            load["expires"] = time.time() + 600
             return load
         except Exception as err:
                 log.error(err)
@@ -47,9 +47,11 @@ class AuthHandler:
             passwd     (str): Password
         """
         try:
-            data = await self.check_user(payload) 
-            if data:   
-                token = jwt.encode(payload=data, key=Settings().secret_key, algorithm=Settings().algorithm, )
+            data = await self.check_user(payload)
+            if data:
+                print(data)
+                token = jwt.encode(payload=data, key=Settings().secret_key, algorithm=Settings().algorithm)
+                print(token)
                 return await self.token_response(token)
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User and password not matched")
         except Exception as err:

@@ -91,7 +91,7 @@ class SuppilerOperation(BaseRepository):
         return [self._schema_out(**dict(row.items())) for row in rows]
         
     async def fetch_by_company_tax_id(self, tax_id:str , company_id:int):
-        query = self._table.select().where(self._table.c.company_tax_id == tax_id and self._table.c.company_id == company_id) 
+        query = self._table.select().where(self._table.c.company_tax_id == tax_id ,self._table.c.company_id == company_id) 
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
 
@@ -121,7 +121,7 @@ class PurchaseOperation(BaseRepository):
 
     async def fetch_by_suppiler_id(self, suppiler_id: int , company_id:int):
         query = self._table.select().where(self._table.c.suppiler_id == suppiler_id 
-        and self._table.c.company_id == company_id)
+        , self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
@@ -132,12 +132,12 @@ class PurchaseOperation(BaseRepository):
     
     async def fetch_by_purchase_date(self, purchsase_date: Date ,company_id:int):
         query = self._table.select().where(self._table.c.purchsase_date == purchsase_date 
-        and self._table.c.company_id == company_id)
+        , self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
     async def fetch_parchase_by_company_id(self,purchase_id:int,company_id:int):
-        query= self._table.select().where(self._table.c.id == purchase_id and 
+        query= self._table.select().where(self._table.c.id == purchase_id , 
         self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
@@ -160,7 +160,7 @@ class OrdersOperation(BaseRepository):
         return order.OrderSchemaUpdate
 
     async def fetch_by_product_id(self, product_id: int, company_id:int):
-        query = self._table.select().where(self._table.c.product_id == product_id and 
+        query = self._table.select().where(self._table.c.product_id == product_id ,
         self._table.c.compnay_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
@@ -229,13 +229,13 @@ class LegerPageOperation(BaseRepository):
     
     async def fetch_by_leger_date(self, leger_date: Date,company_id:int):
         query = self._table.select().where(self._table.c.leger_date == leger_date 
-        and self._table.c.company_id == company_id)
+        , self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
     async def fetch_by_leger_title(self, title:str,company_id:int):
         query = self._table.select().where(self._table.c.title == title 
-        and self._table.c.company_id == company_id)
+        , self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]
     
@@ -295,7 +295,7 @@ class UserOperation(BaseRepository):
 
     async def authenticate(self,user:str,passwd:str):
         query = self._table.select().where(
-            self._table.c.email == user and self._table.c.passwd == passwd
+            self._table.c.email == user , self._table.c.passwd == passwd
             )
         rows= await self._db.fetch_all(query=query)
         
@@ -319,6 +319,6 @@ class RoleOperation(BaseRepository):
         return role.RoleSchemaUpdate
 
     async def fetch_by_role_id(self, role_id: int , company_id:int):
-        query = self._table.select().where(self._table.c.id == role_id and self._table.c.company_id == company_id)
+        query = self._table.select().where(self._table.c.id == role_id , self._table.c.company_id == company_id)
         rows = await self._db.fetch_all(query=query)
         return [self._schema_out(**dict(row.items())) for row in rows]

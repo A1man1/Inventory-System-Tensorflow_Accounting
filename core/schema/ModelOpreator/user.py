@@ -1,8 +1,11 @@
-from core.schema.BaseSchema import IDModelMixin, ModifiedTimeModelMixin, BaseSchema
+import typing
 from datetime import date
-from typing import Any, Dict, Optional
-import typing 
-from pydantic import ValidationError, validator
+from typing import Optional
+
+from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
+                                    ModifiedTimeModelMixin)
+from sqlalchemy.sql.functions import current_date
+
 
 class UserSchema(BaseSchema):
     company_id: Optional[int] 
@@ -24,9 +27,10 @@ class UserSchemaCreate(UserSchema):
     permission:Optional[typing.List[int]] = []
     is_active:Optional[bool] = True
     passwd: Optional[str]
+    registered_date:date = current_date
 
 
-class UserSchemaUpdate(UserSchema):
+class UserSchemaUpdate(UserSchema, ModifiedTimeModelMixin):
     """Update schema for app providers.
 
     Args:

@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import Dict, List, Mapping, Optional, Union
 
 import sqlalchemy
+from sqlalchemy.sql.functions import current_date , current_timestamp
+from sqlalchemy.sql.sqltypes import TIMESTAMP
 from core.config import log
 from core.dbconfig.db_engin import db
 from core.schema.util import utc_now
@@ -22,8 +24,7 @@ class ModifiedTimeModelMixin(BaseModel):
     """
     Model Mixin for created and updated timestamp information tables.
     """
-    last_modified_at: Optional[datetime]
-    
+    last_modified_at: Optional[datetime] = current_timestamp
 
         
 class BaseSchema(BaseModel):

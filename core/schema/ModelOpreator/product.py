@@ -1,9 +1,11 @@
-import typing
+import re 
 from typing import Optional
+from fastapi.exceptions import HTTPException
+from starlette import status
 
 from core.schema.BaseSchema import (BaseSchema, IDModelMixin,
                                     ModifiedTimeModelMixin)
-from pydantic import HttpUrl
+from pydantic import HttpUrl , validator
 
 
 class ProductSchema(BaseSchema):
@@ -19,6 +21,13 @@ class ProductSchema(BaseSchema):
     minimum_required: Optional[int]
     product_image: Optional[HttpUrl]
     supplier_id: Optional[int]
+
+    @validator("product_image", pre=True, always=True)
+    def default_image_product(cls, value:HttpUrl) -> HttpUrl:
+        if not re.match('',value):
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, 
+            detail="needs image url of product")
+        return  value 
 
 
 class ProductSchemaCreate(ProductSchema):
