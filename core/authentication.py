@@ -28,8 +28,10 @@ class AuthHandler:
         load = None 
         try:
             load = await user_repo.authenticate(*dict(payload).values()) 
+            print(load)
             load= dict(load[0])
-            load["expires"] = time.time() + 600
+            load["expires"] = time.time() + 200000
+            print(load)
             return load
         except Exception as err:
                 log.error(err)
@@ -49,9 +51,7 @@ class AuthHandler:
         try:
             data = await self.check_user(payload)
             if data:
-                print(data)
                 token = jwt.encode(payload=data, key=Settings().secret_key, algorithm=Settings().algorithm)
-                print(token)
                 return await self.token_response(token)
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User and password not matched")
         except Exception as err:

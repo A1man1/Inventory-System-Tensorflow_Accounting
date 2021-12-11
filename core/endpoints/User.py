@@ -278,6 +278,7 @@ async def authenticate(login_data:UserLoginSchema):
         Users: Fetched Users object.
     """
     try:
+        print(login_data)
         return await  auth_handler.login(login_data)
 
     except Exception as err:

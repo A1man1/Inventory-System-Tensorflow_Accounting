@@ -295,8 +295,8 @@ class UserOperation(BaseRepository):
 
     async def authenticate(self,user:str,passwd:str):
         query = self._table.select().where(
-            self._table.c.email == user , self._table.c.passwd == passwd
-            )
+            self._table.c.email == user , self._table.c.passwd == passwd)
+            
         rows= await self._db.fetch_all(query=query)
         
         return [self._schema_out(**dict(row.items())) for row in rows]
