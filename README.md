@@ -2,7 +2,7 @@
 A robust FastAPI-based Inventory Management System designed for businesses of all scales. This system offers comprehensive inventory tracking, universal currency support, and AI-driven reporting capabilities to streamline operations and provide actionable insights.
 
 💡 Key Features
-Inventory Management:
+Inventory Management:\n
 
 Add, update, and remove inventory items.
 Track stock levels, sales, and restocking requirements in real-time.
